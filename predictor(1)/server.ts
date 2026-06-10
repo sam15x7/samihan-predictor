@@ -5,13 +5,6 @@ import axios from 'axios';
 import Parser from 'rss-parser';
 import { wc26Fetch } from './server/services/wc26Auth';
 
-import express from 'express';
-import path from 'path';
-import { createServer as createViteServer } from 'vite';
-import axios from 'axios';
-import Parser from 'rss-parser';
-import { wc26Fetch } from './server/services/wc26Auth';
-
 export const app = express();
 
 const WC_COMPETITION_MARKERS = [
@@ -75,6 +68,11 @@ app.get('/api/live-scores', async (req, res) => {
       }
     });
     
+    if (response.data && response.data.errors && !Array.isArray(response.data.errors) && Object.keys(response.data.errors).length > 0) {
+      console.error("API-Football error (live-scores):", response.data.errors);
+      return res.json({ response: [] }); // fallback
+    }
+
     if (response.data && response.data.response) {
       response.data.response = response.data.response.filter((match: any) => 
         match.league && match.league.id === 1 // League ID 1 = FIFA World Cup
@@ -98,6 +96,11 @@ app.get('/api/upcoming', async (req, res) => {
       }
     });
     
+    if (response.data && response.data.errors && !Array.isArray(response.data.errors) && Object.keys(response.data.errors).length > 0) {
+      console.error("API-Football error (upcoming):", response.data.errors);
+      return res.json({ response: [] }); // fallback
+    }
+
     res.json(response.data);
   } catch (e) {
     console.error(e);
@@ -112,6 +115,12 @@ app.get('/api/player', async (req, res) => {
     const response = await axios.get(`https://v3.football.api-sports.io/players?search=${search}&league=1`, {
       headers: { 'x-apisports-key': apiKey }
     });
+    
+    if (response.data && response.data.errors && !Array.isArray(response.data.errors) && Object.keys(response.data.errors).length > 0) {
+      console.error("API-Football error (player):", response.data.errors);
+      return res.json({ response: [] });
+    }
+
     // if league 1 (world cup) provides no result without season, fallback to global search without league
     if (response.data && response.data.results > 0) {
       return res.json(response.data);
@@ -153,6 +162,12 @@ app.get('/api/standings', async (req, res) => {
     const response = await axios.get(`https://v3.football.api-sports.io/standings?league=1&season=2026`, {
       headers: { 'x-apisports-key': apiKey }
     });
+    
+    if (response.data && response.data.errors && !Array.isArray(response.data.errors) && Object.keys(response.data.errors).length > 0) {
+      console.error("API-Football error (standings):", response.data.errors);
+      return res.json({ response: [] }); // fallback
+    }
+
     res.json(response.data);
   } catch(err) {
     console.error(err);
