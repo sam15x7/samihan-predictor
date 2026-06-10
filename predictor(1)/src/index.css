@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #d946ef;
+}
+
+@layer base {
+  :root {
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+    --text-color: #0c0a09;
+    --muted-text: #64748b;
+    --border-color: #e2e8f0;
+    --accent-bg: #f1f5f9;
+  }
+  
+  .dark {
+    --bg-color: #050505;
+    --card-bg: #0d0d0d;
+    --text-color: #ededed;
+    --muted-text: #888888;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --accent-bg: rgba(255, 255, 255, 0.03);
+  }
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.match-card:hover {
+  transform: translateY(-2px);
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.glow-pink {
+  box-shadow: 0 0 30px rgba(217, 70, 239, 0.15);
+}
+.stage-btn-active {
+  box-shadow: 0 0 20px rgba(217, 70, 239, 0.2);
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+.fade-in {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes ticker {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+.animate-ticker {
+  animation: ticker 25s linear infinite;
+  white-space: nowrap;
+}
+
